@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:14.7
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: Admin12345.
+      POSTGRES_USER: admin
+      POSTGRES_DB: ecommerce-api
+    container_name: ecommerce-db
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
