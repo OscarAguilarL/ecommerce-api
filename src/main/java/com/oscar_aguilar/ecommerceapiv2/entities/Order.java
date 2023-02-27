@@ -1,5 +1,6 @@
 package com.oscar_aguilar.ecommerceapiv2.entities;
 
+import com.oscar_aguilar.ecommerceapiv2.user.entities.User;
 import jakarta.persistence.*;
 
 import java.util.Date;
