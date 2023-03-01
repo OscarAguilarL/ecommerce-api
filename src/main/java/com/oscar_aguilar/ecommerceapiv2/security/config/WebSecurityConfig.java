@@ -25,7 +25,7 @@ class WebSecurityConfig {
                 .authorizeHttpRequests((requests) -> {
                             try {
                                 requests
-                                        .requestMatchers("/api/v*/auth/**")
+                                        .requestMatchers("/api/v*/auth/**", "/api/v*/onboarding/**")
                                         .permitAll()
                                         .anyRequest()
                                         .authenticated().and()
