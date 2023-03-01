@@ -1,5 +1,7 @@
 package com.oscar_aguilar.ecommerceapiv2.user.services;
 
+import com.oscar_aguilar.ecommerceapiv2.email.EmailDetails;
+import com.oscar_aguilar.ecommerceapiv2.email.JavaMailService;
 import com.oscar_aguilar.ecommerceapiv2.onboarding.confirmation_code.entities.ConfirmationCode;
 import com.oscar_aguilar.ecommerceapiv2.onboarding.confirmation_code.services.ConfirmationCodeService;
 import com.oscar_aguilar.ecommerceapiv2.user.entities.User;
@@ -24,6 +26,7 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ConfirmationCodeService confirmationCodeService;
+    private final JavaMailService javaMailService;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -31,7 +34,7 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)));
     }
 
-    public ConfirmationCode registerUser(User user) {
+    public User registerUser(User user) {
         boolean userExists = userRepository
                 .findByEmail(user.getEmail())
                 .isPresent();
@@ -54,7 +57,13 @@ public class UserService implements UserDetailsService {
                 user
         );
         confirmationCodeService.saveConfirmationCode(confirmationCode);
-        return confirmationCode;
+
+        javaMailService.sendHtmlEmail(new EmailDetails(
+                user.getEmail(),
+                String.format("Confirmation code: %s", confirmationCode.getCode()),
+                "Verify your account"
+        ));
+        return user;
     }
 
     public void enableUser(String email) {

@@ -14,4 +14,5 @@ public class RegistryRequestDto {
     private String lastname;
     private String email;
     private String password;
+    private String passwordConfirmation;
 }
